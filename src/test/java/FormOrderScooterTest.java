@@ -1,18 +1,21 @@
 import ScooterProject.BaseTest;
+import io.qameta.allure.Owner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
+
 import static ScooterProject.textFields.ErrorMessages.*;
 import static ScooterProject.textFields.OrderFormEnterValue.*;
-import static com.codeborne.selenide.Selenide.open;
 
-public class FormOrderScooter extends BaseTest {
+public class FormOrderScooterTest extends BaseTest {
 
     @Test
-    @DisplayName("Тест на заполнение формы заказа")
-    public void shouldSubmitFormWithValidData() {
+    @Owner("Naruto")
+    @DisplayName("Заполнение формы заказа")
+    public void shouldSubmitFormWithValidData() throws ParseException {
         formPage.clickOrderScooter()
-                .enterFirstAndLastName(FIRST_NAME.getText(),LAST_NAME.getText())
+                .enterFirstAndLastName(FIRST_NAME.getText(), LAST_NAME.getText())
                 .enterAddress(ENTER_ADDRESS.getText())
                 .enterMetroStation()
                 .enterPhoneNumber(ENTER_PHONE_NUMBER.getText())
@@ -24,10 +27,16 @@ public class FormOrderScooter extends BaseTest {
                 .clickOrderAndConfirmButton()
                 .getOrderNumber()
                 .checkOrderNumber();
+
+        orderPage.checkingOrderFields(1, FIRST_NAME.getText())
+                 .checkingOrderFields(2, LAST_NAME.getText())
+                 .checkingOrderFields(3, ENTER_ADDRESS.getText())
+                 .checkingOrderFields(5, ENTER_PHONE_NUMBER.getText());
     }
 
     @Test
-    @DisplayName("Тест на негативный сценарий заполнения формы")
+    @Owner("Naruto")
+    @DisplayName("Негативный сценарий заполнения формы")
     public void shouldShowErrorMessagesForEmptyFields() {
         formPage.clickOrderScooter()
                 .clickNextFollowingForm()
@@ -38,10 +47,11 @@ public class FormOrderScooter extends BaseTest {
     }
 
     @Test
-    @DisplayName("Тест на переход на главную страницу, при нажатии на логотип")
+    @Owner("Naruto")
+    @DisplayName("Переход на главную страницу, при нажатии на логотип")
     public void shouldNavigateToHomePageWhenClickOnLogo() {
         formPage.clickOrderScooter()
                 .clickToHomePageLogo();
-
     }
+
 }

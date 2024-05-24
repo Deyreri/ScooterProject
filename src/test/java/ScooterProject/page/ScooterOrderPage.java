@@ -4,13 +4,13 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class ScooterOrderPage {
+    private String orderNumber;
 
     private final SelenideElement
             nameInput = $("input[placeholder='* Имя']"),
@@ -27,59 +27,59 @@ public class ScooterOrderPage {
             scooterColorSection = $x("//input[@id='black']"),
             courierCommentSection = $x("//input[@placeholder='Комментарий для курьера']"),
             secondOrderButton = $x("(//button[text()='Заказать'])[2]"),
-            orderConfirmButton= $x("//button[text()='Да']"),
+            orderConfirmButton = $x("//button[text()='Да']"),
             homePageLogo = $(".Header_LogoScooter__3lsAR"),
             homePage = $(".Home_HomePage__ZXKIX"),
             orderNumberSelector = $(".Order_Text__2broi"),
             clickNextButtonSelector = $x("//button[contains(text(), 'Посмотреть статус')]"),
-            InputOrderNumber = $x("//input[contains(@class, 'Input_Input__1iN_Z') and contains(@class, 'Track_Input__1g7lq') and contains(@class, 'Input_Filled__1rDxs') and contains(@class, 'Input_Responsible__1jDKN')]");
+            InputOrderNumber = $(".Track_Input__1g7lq");
 
-    @Step("нажатиекнопку заказать, и преход в форму")
+    @Step("Нажатие на кнопку заказать")
     public ScooterOrderPage clickOrderScooter() {
         orderButton.click();
         return this;
     }
 
-    @Step("Заполнение поля 'Имя', и 'Фамилия'")
+    @Step("Заполнение поля имени: '{firstName}', и фамилии: '{lastName}'")
     public ScooterOrderPage enterFirstAndLastName(String firstName, String lastName) {
         nameInput.setValue(firstName);
         lastNameInput.setValue(lastName);
         return this;
     }
 
-    @Step("Заполнение поля 'Адрес: куда привезти заказ'")
+    @Step("Заполнение поля адрес: '{address}'")
     public ScooterOrderPage enterAddress(String address) {
         addressInput.setValue(address);
         return this;
     }
 
-    @Step("Нажатие поля с выбором метро, и выбор 'Бульвар Рокоссовского'")
+    @Step("Выбор поля метро, и выбор станции")
     public ScooterOrderPage enterMetroStation() {
         metroStationSection.click();
         metroStation.click();
         return this;
     }
 
-    @Step("Заполнение поле с номером телефона")
+    @Step("Заполнение поле  с номером телефона: '{phone}'")
     public ScooterOrderPage enterPhoneNumber(String phone) {
         numberInput.setValue(phone);
         return this;
     }
 
-    @Step("Нажатие кнопки далее, и переход на следующую форму")
+    @Step("Нажатие на кнопку далее")
     public ScooterOrderPage clickNextFollowingForm() {
         submitButton.click();
         return this;
     }
 
-    @Step("Выбор даты, когда должны привези самокат")
+    @Step("Выбор даты: '{date}'")
     public ScooterOrderPage enterBringScooterDate(String date) {
         bringScooterDate.click();
         bringScooterDate.setValue(date).pressEnter();
         return this;
     }
 
-    @Step("Указывание срока аренды скутера")
+    @Step("Выбор аренды скутера")
     public ScooterOrderPage enterRentalPeriod() {
         rentalPeriodSection.click();
         rentalPeriodOneDay.click();
@@ -92,19 +92,20 @@ public class ScooterOrderPage {
         return this;
     }
 
-    @Step("Указывание комментария курьеру")
+    @Step("Комментарий для курьера")
     public ScooterOrderPage enterCourierComment(String comment) {
         courierCommentSection.setValue(comment);
         return this;
     }
 
-    @Step("Нажатие кнопки заказать, и подтверждение заказа")
+    @Step("Клик по кнопке заказать, и подтвердить заказ")
     public ScooterOrderPage clickOrderAndConfirmButton() {
         secondOrderButton.click();
         orderConfirmButton.click();
         return this;
     }
 
+    @Step("Получение номера заказа")
     public ScooterOrderPage getOrderNumber() {
         String orderText = orderNumberSelector.getText();
         String orderNumber = orderText.split(": ")[1].split("\\.")[0];
@@ -112,20 +113,21 @@ public class ScooterOrderPage {
         this.orderNumber = orderNumber;
         return this;
     }
-    private String orderNumber;
 
+    @Step("Проверка номера заказа")
     public ScooterOrderPage checkOrderNumber() {
         InputOrderNumber.shouldHave(Condition.value(orderNumber));
         return this;
     }
 
-    @Step("Проверка на негативное заполнение полей формы")
+    @Step("Проверка негативного заполнение полей формы")
     public ScooterOrderPage errorWarningMessages(String message) {
         String errorMessageSelector = String.format("//div[contains(text(),'%s')]", message);
         $(byXpath(errorMessageSelector)).shouldBe(Condition.visible);
         return this;
     }
 
+    @Step("Проверка перехода на главную страницу")
     public ScooterOrderPage clickToHomePageLogo() {
         homePageLogo.click();
         homePage.shouldBe(visible);

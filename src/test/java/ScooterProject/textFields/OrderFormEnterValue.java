@@ -1,5 +1,11 @@
 package ScooterProject.textFields;
 
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public enum OrderFormEnterValue {
     FIRST_NAME("Иван"),
     LAST_NAME("Иванов"),
@@ -16,5 +22,12 @@ public enum OrderFormEnterValue {
 
     public String getText() {
         return text;
+    }
+
+    public String getSimpleDateFormat() throws ParseException {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("d MMMM", new DateFormatSymbols(new Locale("ru")));
+        Date date = inputFormat.parse(BRING_SCOOTER_DATE.getText());
+        return outputFormat.format(date);
     }
 }

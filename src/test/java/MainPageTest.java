@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import static ScooterProject.textFields.AccordionText.*;
 
-public class testAcc extends BaseTest {
+public class MainPageTest extends BaseTest {
     @Test
     public void checkDropdownText() {
         mainPage.clickSection(0)
